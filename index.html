@@ -40,6 +40,7 @@
       }
       .halfCol, .col-2 { float: left; width: 50%; }
       .col-3 { float: left; width: 33%; }
+      .col-4 { float: left; width: 25%; }
 
       #slide-title h2 { margin-top: 2em; }
     </style>
@@ -64,10 +65,9 @@ name: agenda
 3. React goes native
 4. Native for web devs
 5. Code sharing
-6. Extensibility
-7. Incremental adoption
-8. Examples
-9. THE FUTURE!!1!
+6. Extensibility & Incremental adoption
+7. THE FUTURE!!1!
+9. Examples
 
 ---
 
@@ -105,23 +105,27 @@ name: react-before
 
 ## Before React
 
-* DHTML - change web pages after they've loaded with JavaScript maybe!
-* DOM API - awkwardly verbose API to manipulate web pages
-* jQuery - convenient direct web page DOM manipulation
-* YUI, Dojo, MooTools - let's wrap DOM things up into components!
-* Backbone - models with change events & data binding
-* Ember & Angular - let's make client-side MVC stacks!
-
-...and many more frameworks & libraries, but these are the basic themes.
+* DHTML
+* DOM API
+* jQuery
+* YUI, Dojo, MooTools
+* Backbone
+* Ember & Angular
 
 ???
 
-* DOM is awkward - but it was a standard! and it worked across browsers! kinda!
+* DHTML - change web pages after they've loaded with JavaScript maybe!
+* DOM API - awkwardly verbose API to manipulate web pages
+    * DOM is awkward - but it was a standard! and it worked across browsers! kinda!
+* jQuery - convenient direct web page DOM manipulation
+    * jQuery made the DOM so much nicer to work with, offering a fluid API with
+        lots of sugar
+* YUI, Dojo, MooTools - let's wrap DOM things up into components!
+* Backbone - models with change events & data binding
+    * Backbone offered classes and models and events, oh my!
+* Ember & Angular - let's make client-side MVC stacks!
 
-* jQuery made the DOM so much nicer to work with, offering a fluid API with
-lots of sugar
-
-* Backbone offered classes and models and events, oh my!
+* ...and many more frameworks & libraries, but these are the basic themes.
 
 ---
 
@@ -131,10 +135,10 @@ name: react-after
 
 .col-2[
 * No direct DOM manipulation
-* No more handling change events or data bindings
+* No more change events or data bindings
 * Re-render everything when anything changes
 * Make re-renders cheap
-* Simple DOM-based component model
+* Simple component model
 * HTML and CSS all expressed in ES6 JavaScript
 ]
 .col-2[
@@ -287,7 +291,9 @@ layout: true
 
 * Support just enough CSS for web-like layout
 
-* Build a native shell app as glue
+* Build a native shell app to glue all the above together
+
+*(that's what the React Native team did - you don't have to do any of that)*
 
 ---
 
@@ -357,64 +363,29 @@ layout: false
 
 # Code sharing
 
+* JavaScript is the common language across platforms
+* React components have a common API across platforms
+* So, you can share a lot of code between apps
+
+<!--<img style="width: 30%" src="https://cdn.rawgit.com/lmorchard/react-multiplatform/master/shared-overall.svg">-->
+<img style="width: 45%" src="https://cdn.rawgit.com/lmorchard/react-multiplatform/master/shared-views.svg">
+<img style="width: 45%" src="https://cdn.rawgit.com/lmorchard/react-multiplatform/master/shared-models.svg">
+
+???
+
+* These diagrams are quick lines-of-code metrics I generated for my todo app
+
 ---
 
-# Extensibility
-
-* Wrap native components & libraries in React Native bridge code
-
----
-
-# Incremental adoption
+# Extensibility & Incremental adoption
 
 * It's not all-or-nothing
+* Wrap your own native components & libraries
 * Embed React Native as a component in a larger app
-* Extend React Native with more native components
-
----
-
-layout: true
-
-# Examples
-
----
-
-## TodoMVC Multi-Platform
-
-* https://github.com/lmorchard/react-multiplatform/
-
-.col-3[<img class="fullwidth" src="img/todo-web.png">]
-.col-3[<img class="fullwidth" src="img/todo-android.png">]
-.col-3[<img class="fullwidth" src="img/todo-ios.png">]
-
----
-
-## Couch-to-5k Multi-Platform
-
-* https://github.com/lmorchard/C25kReact
-* Still working on the web version of this one.
-
-.col-3[<img class="fullwidth" src="img/c25k-android.png">]
-.col-3[<img class="fullwidth" src="img/c25k-ios.png">]
-.col-3[<img class="fullwidth" src="img/c25k-ios-2.png">]
 
 ???
 
-* This is the app I started this weekend.
-
----
-
-## allyoop - an NBA app
-
-* No web version planned for this, Android just started
-* https://github.com/wwayne/react-native-nba-app
-
-.col-2[<img class="fullwidth" src="img/allyoop-android.png">]
-.col-2[<img class="fullwidth" src="img/allyoop-ios.png">]
-
-???
-
-* I'm not a basketball fan, but this app looks pretty cool
+* This is pretty much how many web projects adopt React, one piece at a time
 
 ---
 
@@ -426,7 +397,105 @@ layout: false
 * Automatic remote updates
 * Component hot-reloading
 
+???
+
+* Isomorphic apps - render React components on the server, too, in node.js
+* Automatic remote updates - something we take for granted on the web, ship
+    smaller updates to the app JS bundle without releasing a new version on an app
+    store
+* Component hot-reloading - rather than reload the whole app when you make a
+    change, just reload and re-render the components you changed
+
+These things all exist in the web React world, but they seem to be coming soon
+or already here for React Native. (I need to do more research.)
+
 ---
+
+layout: true
+
+# Examples
+
+---
+
+## Facebook Ads Manager
+
+https://itunes.apple.com/app/id964397083
+
+.col-2[<img class="fullwidth" src="https://scontent.fdtw1-1.fna.fbcdn.net/hphotos-xft1/t39.2365-6/11891342_1121951694500056_1904665184_n.png" />]
+.col-2[<img class="fullwidth" src="https://scontent.fdtw1-1.fna.fbcdn.net/hphotos-xtf1/t39.2365-6/11891380_1627845260812265_211379441_n.png" />]
+
+The app that started it all
+
+???
+
+I don't actually manage any ads on Facebook, so I have never seen this app myself.
+
+---
+
+## Facebook Groups
+
+https://itunes.apple.com/us/app/facebook-groups/id931735837
+
+<img class="fullwidth" src="https://scontent.fdtw1-1.fna.fbcdn.net/hphotos-xaf1/t39.2365-6/11057099_886670958021382_1730701085_n.png" />
+
+---
+
+## TodoMVC Multi-Platform
+
+https://github.com/lmorchard/react-multiplatform/
+
+.col-3[<img class="fullwidth" src="img/todo-web.png">]
+.col-3[<img class="fullwidth" src="img/todo-android.png">]
+.col-3[<img class="fullwidth" src="img/todo-ios.png">]
+
+My first explorations into React Native
+
+---
+
+## Couch-to-5k Multi-Platform
+
+https://github.com/lmorchard/C25kReact
+
+.col-3[<img class="fullwidth" src="img/c25k-android.png">]
+.col-3[<img class="fullwidth" src="img/c25k-ios.png">]
+.col-3[<img class="fullwidth" src="img/c25k-ios-2.png">]
+
+Still working on the web version of this one.
+
+???
+
+* This is the app I started this weekend.
+
+---
+
+## allyoop - an NBA app
+
+https://github.com/wwayne/react-native-nba-app
+
+.col-2[<img class="fullwidth" src="img/allyoop-android.png">]
+.col-2[<img class="fullwidth" src="img/allyoop-ios.png">]
+
+???
+
+* I'm not a basketball fan, but this app looks pretty cool
+
+---
+
+## React Native Showcase
+
+https://facebook.github.io/react-native/showcase.html
+
+<img class="fullwidth" src="img/showcase.png">
+
+???
+
+* I'm mostly pointing at open source apps because you can look at the code, but
+    here's Facebook's own showcase of React Native apps.
+
+---
+
+layout: false
+class: titleslide, center, middle
 
 # Thank you!
 
