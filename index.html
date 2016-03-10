@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Title</title>
+    <meta charset="utf-8">
+    <style>
+      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+      body { font-family: 'Droid Serif'; }
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: normal;
+        margin-top: 0.125em;
+        margin-bottom: 0.125em;
+      }
+      .inverse {
+        background: #272822;
+        color: #777872;
+        text-shadow: 0 0 20px #333;
+      }
+      .inverse h1, .inverse h2 {
+        color: #f3f3f3;
+        line-height: 0.8em;
+      }
+      .footnote {
+        position: absolute;
+        bottom: 3em;
+        text-align: right;
+      }
+      .red { color: #fa0000; }
+      img.fullwidth { width: 100%; }
+      ul, ol { margin-top: 2em; margin-bottom: 2em; }
+      ul li, ol li { margin-bottom: 1em; }
+      .remark-code {
+        font-family: 'Ubuntu Mono';
+        font-size: 16px;
+        line-height: 1.3em;
+      }
+      .halfCol, .col-2 { float: left; width: 50%; }
+      .col-3 { float: left; width: 33%; }
+
+      #slide-title h2 { margin-top: 2em; }
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+name: title
+class: titleslide, center, middle, inverse
+
+# Intro to React Native
+## Les Orchard (me@lmorchard.com)
+
+---
+
+name: agenda
+
+# Agenda
+
+1. My background
+2. React in a nutshell
+3. React goes native
+4. Native for web devs
+5. Code sharing
+6. Extensibility
+7. Incremental adoption
+8. Examples
+9. THE FUTURE!!1!
+
+---
+
+name: background
+background-image: url()
+
+# My background
+
+.col-2[
+* I work for the Mozilla Corporation
+* I've been a web developer since 1993
+* I love the web (though it might be Stockholm Syndrome)
+* I've reached "Hello World" level in iOS & Android development
+* I built a multi-platform app from scratch last weekend .red[*]
+]
+.col-2[
+<img class="fullwidth" style="margin: 1em;" src="img/me-firefox.jpg" />
+]
+<br style="clear:both">
+
+---
+template: background
+
+.footnote[.red[*] okay, it's a terrible app, but I don't think that's React Native's fault]
+
+---
+
+layout: true
+
+# React in a nutshell
+
+---
+
+name: react-before
+
+## Before React
+
+* DHTML - change web pages after they've loaded with JavaScript maybe!
+* DOM API - awkwardly verbose API to manipulate web pages
+* jQuery - convenient direct web page DOM manipulation
+* YUI, Dojo, MooTools - let's wrap DOM things up into components!
+* Backbone - models with change events & data binding
+* Ember & Angular - let's make client-side MVC stacks!
+
+...and many more frameworks & libraries, but these are the basic themes.
+
+???
+
+* DOM is awkward - but it was a standard! and it worked across browsers! kinda!
+
+* jQuery made the DOM so much nicer to work with, offering a fluid API with
+lots of sugar
+
+* Backbone offered classes and models and events, oh my!
+
+---
+
+name: react-after
+
+## Some crazy ideas from React
+
+.col-2[
+* No direct DOM manipulation
+* No more handling change events or data bindings
+* Re-render everything when anything changes
+* Make re-renders cheap
+* Simple DOM-based component model
+* HTML and CSS all expressed in ES6 JavaScript
+]
+.col-2[
+<img class="fullwidth" style="margin: 1em;" src="img/React.js_logo.svg" />
+]
+
+---
+
+name: react-component-stateless
+
+## Component model: Stateless functions
+
+```javascript
+import ReactDOM from 'react-dom';
+
+const HelloWorld = ({ displayName, greetingMessage, textColor }) =>
+  <div style={{ color: textColor }}>
+    <h1>Hello, {displayName}!</h1>
+    <h2>{greetingMessage}</h2>
+    <p>We hope you enjoy your stay!</p>
+  </div>
+
+ReactDOM.render(
+  <HelloWorld displayName="New Friend"
+              greetingMessage="Welcome!"
+              textColor="green" />,
+  document.getElementById('app')
+);
+```
+
+---
+
+name: react-component-createclass
+
+## Component model: React.createClass()
+
+```javascript
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+const Counter = React.createClass({
+  getInitialState() {
+    return { count: this.props.startAt || 0 }
+  },
+  increment() {
+    this.setState({ count: this.state.count + 1 });
+  },
+  render() {
+    return (
+      <div class="counter">
+        <span>Count: {this.state.count}</span>
+        <button onPress={this.increment}>Increment</button>
+      </div>
+    );
+  }
+});
+
+ReactDOM.render( <Counter startAt="10" />, document.getElementById('app') );
+```
+
+---
+
+name: react-component-es6
+
+## Component model: ES6 classes
+
+```javascript
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+class Counter extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { count: this.props.startAt }
+  }
+  increment() {
+    this.setState({ count: this.state.count + 1 });
+  }
+  render() {
+    return (
+      <div class="counter">
+        <span>Count: {this.state.count}</span>
+        <button onPress={() => this.increment() }>Increment</button>
+      </div>
+    );
+  }
+});
+
+ReactDOM.render( <Counter startAt="10" />, document.getElementById('app') );
+```
+
+???
+
+* constructor () instead of getInitialState()
+
+* methods are not auto-bound, so you have to use arrow functions in event handlers
+
+* also no mixins, but I didn't show those in the React.createClass() example
+
+---
+
+name: react-component-api
+
+## Component API
+
+.halfCol[
+* displayName
+* mixins
+* propTypes
+* statics
+* render()
+* getInitialState()
+* getDefaultProps()
+]
+.halfCol[
+* componentWillMount()
+* componentDidMount()
+* componentWillReceiveProps()
+* shouldComponentUpdate()
+* componentWillUpdate()
+* componentDidUpdate()
+* componentWillUnmount()
+]
+
+???
+
+* There's not much to the component API
+
+* Most everything is handled for you by React, you just build your markup and
+  optionally take care of some setup and teardown when components are "mounted"
+  & "unmounted" from the DOM
+
+---
+
+layout: true
+
+# React goes native
+
+---
+
+## It's simple! Just...
+
+* Wrap native libraries with JS interfaces
+
+* Wrap native platform components as React components
+
+* Orchestrate native code with JavaScript via messaging bridges
+
+* Implement a minimal DOM for composition
+
+* Support just enough CSS for web-like layout
+
+* Build a native shell app as glue
+
+---
+
+## Component model: Stateless function
+
+```javascript
+import React, { AppRegistry, Text, View } from 'react-native';
+
+const HelloWorld = ({ displayName, greetingMessage, textColor }) =>
+  <View>
+    <Text style={{ color: textColor, fontSize: 30 }}>Hello, {displayName}!</Text>
+    <Text style={{ color: textColor, fontSize: 20 }}>{greetingMessage}</Text>
+    <Text style={{ color: textColor }}>We hope you enjoy your stay!</Text>
+  </View>
+
+AppRegistry.registerComponent('MyNativeApp', () => () =>  // (yo dawg)
+  <HelloWorld displayName="New Friend"
+              greetingMessage="Welcome!"
+              textColor="green" />);
+```
+
+...and React.createClass() and ES6 Classes work the same way.
+
+???
+
+* Like I said, I'm not super familiar with iOS dev but I think the View
+  component wraps a UIView instance, and Text wraps a UITextView
+
+---
+
+## Native for web devs: Familiar tools
+
+* Vim + Terminal
+* Local web server
+* HTML-ish markup
+* CSS-alike styles
+* ES6 JavaScript code
+* Node.js build tools
+
+---
+
+name: editing
+
+## Native for web devs: Edit & Reload Dev Cycle
+
+.halfCol[
+* Compile & install the shell app once
+* The JS bundle is dynamically reloadable at any time
+* Enable file watchers to get **live reload**!
+]
+.halfCol[<img class="fullwidth" src="img/ios-dev-menu.png">]
+
+---
+
+## Native for web devs: Debug in Chrome
+
+* Communication between native and JS happens through messaging
+* That messaging can be routed to a Chrome browser window
+* That Chrome browser window can be debugged with dev tools
+* Inspect & manipulate live views and model state from the JS console
+
+![Chrome Debugger](img/chrome-debugger.png)
+
+---
+
+layout: false
+
+# Code sharing
+
+---
+
+# Extensibility
+
+* Wrap native components & libraries in React Native bridge code
+
+---
+
+# Incremental adoption
+
+* It's not all-or-nothing
+* Embed React Native as a component in a larger app
+* Extend React Native with more native components
+
+---
+
+layout: true
+
+# Examples
+
+---
+
+## TodoMVC Multi-Platform
+
+* https://github.com/lmorchard/react-multiplatform/
+
+.col-3[<img class="fullwidth" src="img/todo-web.png">]
+.col-3[<img class="fullwidth" src="img/todo-android.png">]
+.col-3[<img class="fullwidth" src="img/todo-ios.png">]
+
+---
+
+## Couch-to-5k Multi-Platform
+
+* https://github.com/lmorchard/C25kReact
+* Still working on the web version of this one.
+
+.col-3[<img class="fullwidth" src="img/c25k-android.png">]
+.col-3[<img class="fullwidth" src="img/c25k-ios.png">]
+.col-3[<img class="fullwidth" src="img/c25k-ios-2.png">]
+
+???
+
+* This is the app I started this weekend.
+
+---
+
+## allyoop - an NBA app
+
+* No web version planned for this, Android just started
+* https://github.com/wwayne/react-native-nba-app
+
+.col-2[<img class="fullwidth" src="img/allyoop-android.png">]
+.col-2[<img class="fullwidth" src="img/allyoop-ios.png">]
+
+???
+
+* I'm not a basketball fan, but this app looks pretty cool
+
+---
+
+layout: false
+
+# THE FUTURE!!1!
+
+* Isomorphic apps
+* Automatic remote updates
+* Component hot-reloading
+
+---
+
+# Thank you!
+
+    </textarea>
+    <script src="remark-latest.min.js">
+    </script>
+    <script>
+      var slideshow = remark.create();
+    </script>
+  </body>
+</html>
